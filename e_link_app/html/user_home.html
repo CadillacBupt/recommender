@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}
+<link href="./media/home_page.css" rel = "stylesheet" type= "text/css" />
+{% endblock %}
+{% block body %} 
+
+<!--页眉区-->
+<div id="page_head">
+</div>
+
+<!--导航区-->
+<div id="navi"></div>
+
+<!--用户信息区-->
+<div id="user_info">
+  <table id = "user_table">
+    <tr>
+      <td id = "name_key" width="54">用户</td>
+      <td id = "name_value" width="130">{{username}}</td>
+    </tr>
+    <tr>
+      <td id = "email_key">邮箱</td>
+      <td id = "email_value">{{email}}</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</div>
+
+<div id="link_field">
+
+</div>
+
+<!--主要显示区-->
+<div id="main_show">
+    <button id = "add_link_button" type = "button" >添加链接</button>
+
+    <div id = "add_link_div" style = "display:none">
+    <form id = "add_link" name = "add_link" method = "post" action = "http://127.0.0.1:8000/user/add_link/">
+    {% csrf_token %}
+          链接：<input id = "link_url" name = "link_url" type = "text" /> </br>
+          名称：<input id = "link_name" name = "link_name" type = "text"/><br/>
+          标签:<select id = "link_tag" name = "link_tag" >
+                {% for tag in tags %}
+ 	            <option value = {{tag}}> {{tag}} </option>
+                {% endfor %}
+                     <option value = "add_tag">新标签</option>
+               </select>
+          <br/>
+          领域:<select id = "link_field" name = "link_field"/>
+                {% for field in fields %}
+		    <option value = {{field}}>{{field}}</option>
+                {% endfor %}
+                    <option value = "add_field">新的领域</option>
+               </select>
+          <br/>
+          父领域:<select id = "link_parent" name = "link_parent"/>
+                     <option value "empty">空</option>
+                {% for field in fields %}
+		    <option value = {{field}}>{{field}}</option>
+                {% endfor %}
+                    <option value = "add_field">新的领域</option>
+               </select>
+          <input id = "submit" name = "submit" type = "submit" value = "提交" /><br/>
+    </form> 
+   </div>
+
+   <div id = "show_link_div">
+    {% for link in link_array %}                                             
+        <form id = link.id name = "modify_link"  method = "post" action = "http:127.0.0.1:8000/user/modify_link/">
+        {% csrf_token %}
+
+        <a href = {{link.url}} target = "_blank" >{{link.name}}</a><br/>
+
+        标签:<input  name = "tag" type = "text" value = {{link.tag}} readonly = "readonly"/> <br/>
+
+        领域:<input  name = "field" type = "text" value = {{link.field}} readonly = "readonly"/> <br/>
+
+        <img  src = "./media/increase.jpg" width = "20" height = "30" / > 
+        <button type = "button" id = "like_num">
+        {{link.like_num}}
+        </button>
+
+        <img src = "./media/decrease.jpg" width = "30" height = "30" /> 
+        <button type = "button" id = "dislike_num">
+         {{link.dislike_num}}
+        </button>
+
+        <img src = "./media/increase.jpg" width = "20" height = "30" /> 
+        <button type = "button" id="used_num">
+         {{link.used_num}}
+        </button>
+        <br/>
+         </form>
+    {% endfor %}
+   </div>
+</div>
+
+<!--搜索区-->
+ <div id="search">
+    <form id="search_form" name="search_form" method="post" action="">
+      	 <input name="search_input" type="text" id="search_input"/>
+         <input name="click" type="submit" id = "click" value ="确定"/>
+    </form>
+  </div>
+  
+<!--推荐区-->
+<div id="recommend"></div>
+
+{% endblock %}
